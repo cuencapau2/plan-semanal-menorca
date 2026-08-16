@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menorca · 17–23 agosto</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:#16323A;
+    --paper:#F6F1E2;
+    --paper-soft:#FBF8EF;
+    --teal:#2F8F86;
+    --teal-deep:#1E6961;
+    --terracotta:#B5502E;
+    --gold:#C98F2B;
+    --sage:#7C9788;
+    --line:#D8CFB4;
+    --card-shadow: 0 1px 0 rgba(22,50,58,0.06);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(22,50,58,0.05) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
+
+  .wrap{max-width:760px; margin:0 auto; padding:28px 18px 80px;}
+
+  /* ---------- HEADER ---------- */
+  header{
+    margin-bottom: 22px;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--teal-deep);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:14px; height:1px;
+    background:var(--teal-deep);
+    display:inline-block;
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(32px, 7vw, 48px);
+    line-height:1.02;
+    margin:8px 0 6px;
+    letter-spacing:-0.01em;
+  }
+  h1 em{
+    font-style:italic;
+    font-weight:400;
+    color:var(--terracotta);
+  }
+  .subhead{
+    font-size:15px;
+    color:#3C5A5F;
+    max-width:52ch;
+    line-height:1.5;
+  }
+
+  /* ---------- LEGEND ---------- */
+  .legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 14px;
+    margin:20px 0 6px;
+    padding:14px 16px;
+    background:var(--paper-soft);
+    border:1px solid var(--line);
+    border-radius:10px;
+  }
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    color:#4A5F63;
+    font-family:'IBM Plex Mono', monospace;
+  }
+  .legend-item svg{width:14px;height:14px;flex-shrink:0;color:var(--teal-deep);}
+
+  /* ---------- DAY TABS ---------- */
+  .daynav{
+    position:sticky;
+    top:0;
+    z-index:10;
+    display:flex;
+    overflow-x:auto;
+    gap:2px;
+    margin:26px 0 0;
+    padding:8px 0;
+    background:var(--paper);
+    scrollbar-width:none;
+  }
+  .daynav::-webkit-scrollbar{display:none;}
+  .daytab{
+    flex:0 0 auto;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    padding:9px 13px;
+    border:1px solid var(--line);
+    background:var(--paper-soft);
+    color:#5C6F72;
+    cursor:pointer;
+    border-radius:8px;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:2px;
+    transition:all .15s ease;
+    line-height:1.3;
+  }
+  .daytab .dname{font-family:'Fraunces',serif; font-size:14px; font-weight:600; color:var(--ink);}
+  .daytab .dweather{font-size:10px; opacity:.75;}
+  .daytab:hover{border-color:var(--teal);}
+  .daytab.active{
+    background:var(--ink);
+    border-color:var(--ink);
+  }
+  .daytab.active .dname{color:var(--paper);}
+  .daytab.active .dweather{color:var(--paper);}
+  .daytab.active{color:var(--paper);}
+
+  /* ---------- DAY PANEL ---------- */
+  .day{display:none;}
+  .day.active{display:block; animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+
+  .day-title{
+    margin:26px 0 4px;
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .day-title h2{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:26px;
+    margin:0;
+  }
+  .day-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    padding:3px 9px;
+    border-radius:20px;
+    background:rgba(47,143,134,0.12);
+    color:var(--teal-deep);
+    white-space:nowrap;
+  }
+  .day-tag.warn{background:rgba(181,80,46,0.12); color:var(--terracotta);}
+  .day-note{
+    font-size:13.5px;
+    color:#4A5F63;
+    margin:6px 0 18px;
+    line-height:1.5;
+    max-width:56ch;
+  }
+
+  /* ---------- TIMELINE ---------- */
+  .timeline{
+    position:relative;
+    padding-left:26px;
+    margin-top:10px;
+  }
+  .timeline::before{
+    content:"";
+    position:absolute;
+    left:7px; top:6px; bottom:6px;
+    width:1px;
+    background:repeating-linear-gradient(to bottom, var(--line) 0 4px, transparent 4px 8px);
+  }
+
+  .stop{
+    position:relative;
+    margin-bottom:6px;
+    padding-bottom:18px;
+  }
+  .stop::before{
+    content:"";
+    position:absolute;
+    left:-26px; top:4px;
+    width:13px; height:13px;
+    border-radius:50%;
+    background:var(--paper);
+    border:2px solid var(--teal-deep);
+  }
+  .stop.type-dinner::before, .stop.type-home::before{
+    border-color:var(--gold);
+  }
+  .stop.type-adventure::before{
+    border-color:var(--terracotta);
+  }
+
+  .stop-card{
+    background:var(--paper-soft);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:14px 16px;
+    box-shadow:var(--card-shadow);
+  }
+  .stop-head{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+  }
+  .stop-icon{
+    flex:0 0 auto;
+    width:30px; height:30px;
+    border-radius:8px;
+    background:rgba(47,143,134,0.1);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--teal-deep);
+  }
+  .stop.type-adventure .stop-icon{background:rgba(181,80,46,0.1); color:var(--terracotta);}
+  .stop.type-dinner .stop-icon, .stop.type-home .stop-icon{background:rgba(201,143,43,0.12); color:var(--gold);}
+  .stop-icon svg{width:17px;height:17px;}
+
+  .stop-meta{flex:1; min-width:0;}
+  .stop-time{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--teal-deep);
+    letter-spacing:0.02em;
+  }
+  .stop-title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:17px;
+    margin:1px 0 3px;
+  }
+  .stop-desc{
+    font-size:13px;
+    color:#455A5E;
+    line-height:1.48;
+  }
+  .badges{display:flex; flex-wrap:wrap; gap:6px; margin-top:9px;}
+  .badge{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    padding:3px 8px;
+    border-radius:6px;
+    white-space:nowrap;
+  }
+  .badge.tip{background:rgba(47,143,134,0.12); color:var(--teal-deep);}
+  .badge.warn{background:rgba(181,80,46,0.13); color:var(--terracotta);}
+  .badge.food{background:rgba(201,143,43,0.14); color:#8A6414;}
+
+  .linkrow{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;}
+  .maplink{
+    display:inline-flex; align-items:center; gap:5px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    padding:5px 10px;
+    border-radius:7px;
+    text-decoration:none;
+    border:1px solid var(--teal-deep);
+    color:var(--teal-deep);
+    background:rgba(47,143,134,0.06);
+    transition:background .12s ease;
+  }
+  .maplink:hover{background:rgba(47,143,134,0.16);}
+  .maplink.parking{border-color:var(--gold); color:#8A6414; background:rgba(201,143,43,0.07);}
+  .maplink.parking:hover{background:rgba(201,143,43,0.16);}
+  .maplink svg{width:12px;height:12px;}
+
+  /* ---------- LEG (transit between stops) ---------- */
+  .leg{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:8px 0 8px 2px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:#6C7E80;
+  }
+  .leg svg{width:14px; height:14px; color:var(--sage); flex-shrink:0;}
+  .leg .dots{
+    flex:0 0 auto;
+    letter-spacing:2px;
+    color:var(--line);
+  }
+
+  footer{
+    margin-top:50px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:#8A9A9C;
+    text-align:center;
+  }
+
+  @media (max-width:480px){
+    .wrap{padding:20px 14px 70px;}
+    .legend{gap:6px 10px; padding:12px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Cuaderno de ruta · Menorca</div>
+    <h1>17 – 23 <em>agosto</em></h1>
+    <p class="subhead">Arenal d'en Castell como base. Playas del norte a pie de coche, dos días de calas más salvajes, y las visitas cortas repartidas entre medio. Comida y cena en el apartamento salvo el viernes en Ciutadella.</p>
+  </header>
+
+  <div class="legend" id="legend"></div>
+
+  <nav class="daynav" id="daynav"></nav>
+
+  <div id="days"></div>
+
+  <footer>Plan de referencia — se ajusta sobre la marcha según ánimo, cansancio y tiempo real ⛵</footer>
+</div>
+
+<script>
+const ICONS = {
+  plane: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13.5 21 6l-3.2 8.4L21 18l-6.5-1.3L11 21l-1.3-6.2L3 13.5Z"/><path d="M9.7 14.8 6 18"/></svg>`,
+  beach: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c3-1.2 13-1.2 16 0"/><path d="M12 20c0-6 3-10 8-11"/><path d="M12 20c0-6-3-10-8-11"/><path d="M12 20V9"/></svg>`,
+  pool: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16c1.5 1 3 1 4.5 0s3-1 4.5 0 3 1 4.5 0 3-1 4.5 0"/><path d="M3 20c1.5 1 3 1 4.5 0s3-1 4.5 0 3 1 4.5 0 3-1 4.5 0"/><path d="M6 12V6a2 2 0 0 1 2-2h2"/><circle cx="16" cy="6" r="2"/></svg>`,
+  lighthouse: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 22h4"/><path d="M9 22 10.5 4h3L15 22"/><path d="M9.5 13h5"/><path d="M8.5 8h7"/><path d="M10.5 4 9 2h6l-1.5 2"/><path d="M4 14l4-1.5M20 14l-4-1.5"/></svg>`,
+  village: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V11l4-3.5L11 11v10"/><path d="M13 21V9l4-3 4 3v12"/><path d="M3 21h18"/><path d="M6 21v-4h2v4"/></svg>`,
+  nature: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V13"/><path d="M12 13c-5 0-8-3-8-8 5 0 8 3 8 8Z"/><path d="M12 13c5 0 8-3 8-8-5 0-8 3-8 8Z"/></svg>`,
+  home: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v10h12V10"/><path d="M10 20v-6h4v6"/></svg>`,
+  dinner: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v8M5 2v5a2 2 0 0 0 4 0V2M7 10v12"/><path d="M17 2c-1.5 0-2.5 1.8-2.5 5s1 5 2.5 5v10"/></svg>`,
+  car: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16V12l2-5h12l2 5v4"/><path d="M4 16h16"/><circle cx="7.5" cy="16.5" r="1.6"/><circle cx="16.5" cy="16.5" r="1.6"/></svg>`,
+  walk: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="15" cy="4.5" r="1.4" fill="currentColor" stroke="none"/><path d="M13 8l-2 3 1.5 2L11 19"/><path d="M15 8l3 2-1 4 2 5"/><path d="M13 11l-3.5 1"/></svg>`,
+  pin: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.3"/></svg>`,
+  parkP: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 16V7h3.5a2.5 2.5 0 0 1 0 5H9"/></svg>`,
+};
+
+function dirUrl(coords){ return `https://www.google.com/maps/dir/?api=1&destination=${coords[0]},${coords[1]}`; }
+
+function icon(name){ return ICONS[name] || ""; }
+
+const LEGEND = [
+  ["beach","Playa"], ["village","Pueblo"], ["lighthouse","Faro"],
+  ["nature","Naturaleza"], ["pool","Piscina"], ["home","Apartamento"],
+  ["dinner","Comida / cena"], ["car","Trayecto en coche"], ["walk","Caminata"],
+];
+
+const APT = [40.021, 4.170]; // Via de Ronda, Arenal d'en Castell (aprox.)
+
+const DATA = [
+{
+  date:"Lun 17", label:"Llegada", weather:"☀️ 32°", tagClass:"", note:"Aterrizaje a las 7h, check-in a las 16h — el único día sin el patrón de dos playas.",
+  stops:[
+    {icon:"plane", time:"07:00", title:"Aeropuerto de Menorca", desc:"Recogida del coche de alquiler. Contad 30-45 min con el papeleo.", type:"", coords:[39.8633392,4.2211303]},
+    {leg:["car","≈ 30 min"]},
+    {icon:"beach", time:"08:00 – 13:00", title:"Playa Son Saura (Son Parc)", desc:"Aguas tranquilas y poco profundas, aparcamiento fácil — buena entrada suave tras el vuelo.", type:"", coords:[40.0331694,4.1611362]},
+    {leg:["car","≈ 10 min"]},
+    {icon:"home", time:"13:00 – 16:00", title:"Comida + check-in", desc:"Comida en el apartamento. Check-in oficial a las 16:00.", type:"home", coords:APT},
+    {icon:"pool", time:"16:00 – 18:00", title:"Descanso + piscina + ducha", desc:"Rato tranquilo, piscina del complejo y ducha antes de salir de nuevo.", type:"", coords:APT},
+    {leg:["car","≈ 15 min"]},
+    {icon:"village", time:"18:15 – 19:15", title:"Fornells", desc:"Paseo corto por el pueblo pesquero, de camino al faro.", type:"", coords:[40.0571447,4.1302671]},
+    {leg:["car","≈ 15 min"]},
+    {icon:"lighthouse", time:"19:30 – 21:30", title:"Far de Cavalleria", desc:"Atardecer sobre los acantilados, museo gratuito. Parking limitado, id con margen.", type:"", coords:[40.0889337,4.0921773]},
+    {leg:["car","≈ 30 min"]},
+    {icon:"dinner", time:"21:45", title:"Cena en el apartamento", desc:"", type:"dinner", coords:APT},
+  ]
+},
+{
+  date:"Mar 18", label:"Norte", weather:"☀️ 31° · 0%", tagClass:"", note:"Dos playas del norte, tarde tranquila sin excursión larga.",
+  stops:[
+    {icon:"beach", time:"08:30 – 12:30", title:"Cala Pregonda", desc:"Arena rojiza, de las más espectaculares del norte. Salid antes de las 9-10h por el parking.", type:"", coords:[40.0563102,4.0423301], parking:[40.0563102,4.0423301], badges:[["warn","🚶 20-25 min caminata"]]},
+    {leg:["car","≈ 20 min"]},
+    {icon:"pool", time:"13:00 – 16:00", title:"Piscina + comida", desc:"Piscina antes de comer en el apartamento.", type:"", coords:APT},
+    {leg:["car","≈ 15 min"]},
+    {icon:"beach", time:"16:00 – 19:00", title:"Cala Tirant", desc:"Playa amplia y tranquila, buena para los jóvenes.", type:"", coords:[40.0460284,4.102036], badges:[["food","🧺 sin chiringuito — llevad algo"]]},
+    {leg:["car","≈ 15 min"]},
+    {icon:"dinner", time:"19:30", title:"Vuelta + cena en el apartamento", desc:"", type:"dinner", coords:APT},
+  ]
+},
+{
+  date:"Mié 19", label:"Aventura", weather:"☀️ 31° · 0%", tagClass:"warn", note:"Día de caminatas — pero ahora sí con piscina al volver.",
+  stops:[
+    {icon:"beach", time:"09:00 – 13:30", title:"Cala Pilar", desc:"Una de las mejores calas de la isla, arena rojiza y aguas turquesa. Camino rural entre fincas.", type:"adventure", coords:[40.0512951,3.9786896], parking:[40.0512951,3.9786896], badges:[["warn","🚶 40-45 min caminata / trayecto"],["food","🧺 sin socorrista ni bar — llevad tupper y agua"]]},
+    {leg:["car","≈ 20 min"]},
+    {icon:"beach", time:"14:00 – 17:30", title:"Binimel·la", desc:"Justo al lado de Pregonda, acceso mucho más fácil — buena para relajar tras la caminata.", type:"", coords:[40.051623,4.0531783]},
+    {leg:["car","≈ 25 min"]},
+    {icon:"pool", time:"18:00 – 19:30", title:"Piscina", desc:"Añadida: relax en la piscina antes de cenar.", type:"", coords:APT},
+    {icon:"dinner", time:"20:00", title:"Cena en el apartamento", desc:"", type:"dinner", coords:APT},
+  ]
+},
+{
+  date:"Jue 20", label:"Sureste", weather:"⛅ 31° · 45%", tagClass:"warn", note:"Tratamos el día como si no lloviese. Mañana de naturaleza y playa, piscina al comer, ducha antes de Binibeca.",
+  stops:[
+    {icon:"nature", time:"09:00 – 11:00", title:"S'Albufera des Grau", desc:"Paseo por la laguna, buena luz de mañana.", type:"", coords:[39.9398678,4.2516012]},
+    {leg:["car","≈ 18 min"]},
+    {icon:"beach", time:"11:15 – 13:00", title:"Sa Mesquida", desc:"4.5★ — la mejor playa cerca de S'Albufera, aguas claras, chiringuito en la playa.", type:"", coords:[39.9160969,4.2867608]},
+    {leg:["car","≈ 45 min"]},
+    {icon:"pool", time:"13:30 – 16:00", title:"Comida + piscina", desc:"Comida en el apartamento y piscina.", type:"", coords:APT},
+    {icon:"home", time:"16:00 – 16:20", title:"Ducha", desc:"Antes de salir hacia Binibeca.", type:"home", coords:APT},
+    {leg:["car","≈ 50 min"]},
+    {icon:"village", time:"17:00 – 19:00", title:"Binibeca Vell", desc:"Pueblo de casas blancas encaladas, muy fotogénico — llegáis duchados.", type:"", coords:[39.8203316,4.2448712]},
+    {leg:["car","≈ 50 min"]},
+    {icon:"dinner", time:"19:50", title:"Cena en el apartamento", desc:"", type:"dinner", coords:APT},
+  ]
+},
+{
+  date:"Vie 21", label:"Oeste", weather:"🌧 27° · 65%", tagClass:"warn", note:"Simplificado a una sola playa por la mañana, para llegar con calma a Ciutadella. Far d'Artrutx movido aquí, muy cerca del casco antiguo.",
+  stops:[
+    {icon:"beach", time:"09:00 – 11:30", title:"Cala en Turqueta", desc:"De las calas más fotografiadas de Menorca, en el suroeste.", type:"adventure", coords:[39.9310593,3.9148662], parking:[39.9310593,3.9148662], badges:[["warn","🚶 20 min caminata / trayecto"]]},
+    {leg:["car","≈ 20 min"]},
+    {icon:"village", time:"12:00 – 19:00", title:"Ciutadella", desc:"Casco antiguo, catedral y mercado. Muchas tiendas cierran de 13h a 18h.", type:"", coords:[40.0009196,3.8360987]},
+    {leg:["car","≈ 20 min"]},
+    {icon:"lighthouse", time:"19:30 – 20:30", title:"Far d'Artrutx", desc:"Atardecer en el extremo suroeste, a solo 20 min de Ciutadella.", type:"", coords:[39.9226349,3.8241786]},
+    {leg:["car","≈ 20 min"]},
+    {icon:"dinner", time:"21:00", title:"Cena en Ciutadella", desc:"Único día de cena fuera.", type:"dinner", coords:[40.0009196,3.8360987]},
+    {leg:["car","≈ 55 min"]},
+    {icon:"home", time:"22:00", title:"Vuelta al apartamento", desc:"", type:"home", coords:APT},
+  ]
+},
+{
+  date:"Sáb 22", label:"Sur", weather:"⛅ 27° · 15%", tagClass:"", note:"Día dedicado a las calas del sur — parking único para las tres playas.",
+  stops:[
+    {icon:"beach", time:"08:30 – 12:30", title:"Cala Macarella + Macarelleta", desc:"Aparcad en el parking público de Cala Galdana (sin visitar esa playa).", type:"adventure", coords:[39.9385586,3.9372421], parking:[39.9382341,3.9598256], badges:[["warn","🚶 35-40 min caminata"],["tip","🛥 barco-taxi de vuelta: 12€/persona"]]},
+    {leg:["walk","mismo parking"]},
+    {icon:"beach", time:"13:00 – 15:30", title:"Cala Mitjana", desc:"Aguas cristalinas, camino llano desde el mismo aparcamiento.", type:"", coords:[39.93376,3.9713948], parking:[39.9396228,3.9667374], badges:[["warn","🚶 15-25 min caminata"],["food","🧺 sin servicios — llevad tupper"]]},
+    {leg:["car","≈ 55 min"]},
+    {icon:"dinner", time:"16:30", title:"Vuelta + cena en el apartamento", desc:"Día largo — sin piscina ni faro hoy.", type:"dinner", coords:APT},
+  ]
+},
+{
+  date:"Dom 23", label:"Vuelta", weather:"⛅ 26° · 25%", tagClass:"", note:"Última mañana, sin prisas, playa al lado del apartamento.",
+  stops:[
+    {icon:"beach", time:"09:00 – 12:00", title:"Arenal d'en Castell", desc:"Último baño — a 2 min a pie del apartamento.", type:"", coords:[40.0215902,4.1822844]},
+    {leg:["walk","2 min a pie"]},
+    {icon:"plane", time:"12:30", title:"Maletas y salida", desc:"Rumbo al aeropuerto. ¡Buen viaje de vuelta!", type:"home", coords:[39.8633392,4.2211303]},
+  ]
+},
+];
+
+// ---------- render ----------
+const legendEl = document.getElementById('legend');
+LEGEND.forEach(([k,label])=>{
+  const d = document.createElement('div');
+  d.className='legend-item';
+  d.innerHTML = icon(k) + '<span>'+label+'</span>';
+  legendEl.appendChild(d);
+});
+
+const navEl = document.getElementById('daynav');
+const daysEl = document.getElementById('days');
+
+DATA.forEach((day, i)=>{
+  const tab = document.createElement('button');
+  tab.className = 'daytab' + (i===0 ? ' active':'');
+  tab.innerHTML = `<span class="dname">${day.date}</span><span class="dweather">${day.weather}</span>`;
+  tab.onclick = ()=> selectDay(i);
+  navEl.appendChild(tab);
+
+  const panel = document.createElement('section');
+  panel.className = 'day' + (i===0 ? ' active':'');
+  panel.id = 'day-'+i;
+
+  let stopsHtml = '<div class="timeline">';
+  day.stops.forEach(s=>{
+    if(s.leg){
+      const [mode, dur] = s.leg;
+      stopsHtml += `<div class="leg">${icon(mode)}<span>${dur}</span><span class="dots">···········</span></div>`;
+      return;
+    }
+    const badges = (s.badges||[]).map(([cls,text])=>`<span class="badge ${cls}">${text}</span>`).join('');
+    let links = '';
+    if(s.coords){
+      links += `<a class="maplink" href="${dirUrl(s.coords)}" target="_blank" rel="noopener">${icon('pin')}<span>Cómo llegar</span></a>`;
+    }
+    if(s.parking){
+      links += `<a class="maplink parking" href="${dirUrl(s.parking)}" target="_blank" rel="noopener">${icon('parkP')}<span>Parking</span></a>`;
+    }
+    stopsHtml += `
+      <div class="stop type-${s.type||''}">
+        <div class="stop-card">
+          <div class="stop-head">
+            <div class="stop-icon">${icon(s.icon)}</div>
+            <div class="stop-meta">
+              <div class="stop-time">${s.time}</div>
+              <div class="stop-title">${s.title}</div>
+              ${s.desc ? `<div class="stop-desc">${s.desc}</div>` : ''}
+              ${badges ? `<div class="badges">${badges}</div>` : ''}
+              ${links ? `<div class="linkrow">${links}</div>` : ''}
+            </div>
+          </div>
+        </div>
+      </div>`;
+  });
+  stopsHtml += '</div>';
+
+  panel.innerHTML = `
+    <div class="day-title">
+      <h2>${day.date} · ${day.label}</h2>
+      <span class="day-tag ${day.tagClass}">${day.weather}</span>
+    </div>
+    <p class="day-note">${day.note}</p>
+    ${stopsHtml}
+  `;
+  daysEl.appendChild(panel);
+});
+
+function selectDay(i){
+  document.querySelectorAll('.daytab').forEach((t,idx)=>t.classList.toggle('active', idx===i));
+  document.querySelectorAll('.day').forEach((d,idx)=>d.classList.toggle('active', idx===i));
+  document.getElementById('day-'+i).scrollIntoView({behavior:'smooth', block:'start'});
+}
+</script>
+</body>
+</html>
